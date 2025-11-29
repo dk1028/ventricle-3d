@@ -1,63 +1,41 @@
-```gitignore
-# -----------------------
-# Python cache / build
-# -----------------------
+# -------------------------
+# Data & heavy artifacts
+# -------------------------
+
+# Raw and rendered data (do not commit real data)
+data/good_stl/*
+data/output_new/*
+data/procrustes_new1/*
+data/ssm_new/*
+data/rendered_masks/*
+data/features/*
+data/coefficients/*
+
+# Checkpoints and evaluation results
+checkpoints/*
+evaluation/*
+
+# But keep the placeholder files so folders exist in the repo
+!data/.gitkeep
+!data/good_stl/.gitkeep
+!data/output_new/.gitkeep
+!data/procrustes_new1/.gitkeep
+!data/ssm_new/.gitkeep
+!data/rendered_masks/.gitkeep
+!data/features/.gitkeep
+!data/coefficients/.gitkeep
+!checkpoints/.gitkeep
+!evaluation/.gitkeep
+
+# -------------------------
+# Python / editor junk
+# -------------------------
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
 *.pyd
-*.so
-*.dll
-*.egg-info/
-dist/
-build/
-
-# -----------------------
-# Virtual environments
-# -----------------------
-.venv/
-venv/
-env/
-ENV/
-
-# -----------------------
-# Jupyter / notebooks
-# -----------------------
-.ipynb_checkpoints/
-*.ipynb
-
-# -----------------------
-# IDE / editor settings
-# -----------------------
+*.swp
+*.swo
 .vscode/
-.idea/
-*.code-workspace
-
-# -----------------------
-# OS-specific files
-# -----------------------
-.DS_Store
-Thumbs.db
-
-# -----------------------
-# Project-specific data
-# -----------------------
-
-# Raw and processed meshes
-data/good_stl/
-data/output_new/
-data/procrustes_new1/
-data/ssm_new/
-
-# Rendered images and features
-data/rendered_masks/
-data/features/
-data/coefficients/
-
-# Model checkpoints and evaluation outputs
-checkpoints/
-evaluation/
-
-# large logs or temporary files
-*.log
-*.tmp
+.venv/
+env/
