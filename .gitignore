@@ -1,0 +1,63 @@
+```gitignore
+# -----------------------
+# Python cache / build
+# -----------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg-info/
+dist/
+build/
+
+# -----------------------
+# Virtual environments
+# -----------------------
+.venv/
+venv/
+env/
+ENV/
+
+# -----------------------
+# Jupyter / notebooks
+# -----------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# -----------------------
+# IDE / editor settings
+# -----------------------
+.vscode/
+.idea/
+*.code-workspace
+
+# -----------------------
+# OS-specific files
+# -----------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------
+# Project-specific data
+# -----------------------
+
+# Raw and processed meshes
+data/good_stl/
+data/output_new/
+data/procrustes_new1/
+data/ssm_new/
+
+# Rendered images and features
+data/rendered_masks/
+data/features/
+data/coefficients/
+
+# Model checkpoints and evaluation outputs
+checkpoints/
+evaluation/
+
+# large logs or temporary files
+*.log
+*.tmp
