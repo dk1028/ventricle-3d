@@ -4,13 +4,18 @@ import trimesh
 from sklearn.decomposition import PCA
 from sklearn.neighbors import NearestNeighbors
 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+
 # 1) make input folder and where to save result
 
 
 # folder with input STL after align with GPA
-INPUT_DIR = r"C:\Users\AV75950\python\env\shapenet5\procrustes_new1"
+INPUT_DIR = DATA_DIR / "procrustes_new1"
 # folder to put result of shape model
-OUTPUT_DIR = r"C:\Users\AV75950\python\env\shapenet5\ssm_new"
+OUTPUT_DIR = DATA_DIR / "ssm_new"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
@@ -18,7 +23,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 stl_files = sorted([
-    os.path.join(INPUT_DIR, f)
+    INPUT_DIR / f
     for f in os.listdir(INPUT_DIR)
     if f.lower().endswith(".stl")
 ])
@@ -74,14 +79,14 @@ print(f"Selected M = {M} modes to reach 90% variance.")
 # 6) save result: number array and STL file
 
 # save numbers
-np.save(os.path.join(OUTPUT_DIR, "mean_shape.npy"), mean_shape_vec)
-np.save(os.path.join(OUTPUT_DIR, "modes.npy"),        modes[:M])
-np.save(os.path.join(OUTPUT_DIR, "eigenvalues.npy"), eigenvalues[:M])
+np.save(OUTPUT_DIR / "mean_shape.npy", mean_shape_vec)
+np.save(OUTPUT_DIR / "modes.npy",        modes[:M])
+np.save(OUTPUT_DIR / "eigenvalues.npy", eigenvalues[:M])
 
 # save average shape as STL file
 mean_verts = mean_shape_vec.reshape(K, 3)
 mean_mesh  = trimesh.Trimesh(vertices=mean_verts, faces=faces)
-mean_mesh.export(os.path.join(OUTPUT_DIR, "mean_shape.stl"))
+mean_mesh.export(OUTPUT_DIR / "mean_shape.stl")
 
 # save each mode as STL file, show how it change in + and - 3 sigma
 for j in range(M):
@@ -93,6 +98,6 @@ for j in range(M):
         vertsj = vec.reshape(K, 3)
         meshj  = trimesh.Trimesh(vertices=vertsj, faces=faces)
         fname  = f"mode{j+1}_{tag}.stl"
-        meshj.export(os.path.join(OUTPUT_DIR, fname))
+        meshj.export(OUTPUT_DIR / fname)
 
 print(f"PCA results saved to {OUTPUT_DIR}")

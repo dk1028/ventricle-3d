@@ -21,13 +21,18 @@ import numpy as np
 import trimesh
 from sklearn.neighbors import NearestNeighbors
 
-# ─── 경로 설정 ──────────────────────────────────────────
-DEFAULT_INPUT_DIR = r"C:\Users\AV75950\python\env\shapenet5\procrustes_new1"
-DEFAULT_MEAN      = r"C:\Users\AV75950\python\env\shapenet5\ssm_new\mean_shape.npy"
-DEFAULT_MODES     = r"C:\Users\AV75950\python\env\shapenet5\ssm_new\modes.npy"
-DEFAULT_OUT_DIR   = r"C:\Users\AV75950\Documents\coefficients"
+from pathlib import Path
 
-# ─── PCA 투영 함수 ────────────────────────────────────────
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+
+# ─── Path setup ──────────────────────────────────────────
+DEFAULT_INPUT_DIR = DATA_DIR / "procrustes_new1"
+DEFAULT_MEAN      = DATA_DIR / "ssm_new" / "mean_shape.npy"
+DEFAULT_MODES     = DATA_DIR / "ssm_new" / "modes.npy"
+DEFAULT_OUT_DIR   = DATA_DIR / "coefficients"
+
+# ─── PCA projection function ─────────────────────────────
 def project_to_pca(shape_vec, mean_vec, modes):
     """
     Compute PCA coefficients for a shape vector:
@@ -39,7 +44,7 @@ def project_to_pca(shape_vec, mean_vec, modes):
     diff = shape_vec - mean_vec
     return modes.dot(diff)
 
-# ─── 메인 함수 ──────────────────────────────────────────
+# ─── Main function ───────────────────────────────────────
 def main(input_dir, mean_path, modes_path, out_dir):
     # Load PCA basis
     mean_vec = np.load(mean_path)
@@ -75,13 +80,13 @@ def main(input_dir, mean_path, modes_path, out_dir):
         coeff = project_to_pca(shape_vec, mean_vec, modes)
 
         # Save to NPY
-        shape_out_dir = os.path.join(out_dir, shape_name)
+        shape_out_dir = Path(out_dir) / shape_name
         os.makedirs(shape_out_dir, exist_ok=True)
-        out_path = os.path.join(shape_out_dir, 'coeff.npy')
+        out_path = shape_out_dir / 'coeff.npy'
         np.save(out_path, coeff)
         print(f"[✓] Saved coefficients for {shape_name} at {out_path}")
 
-# ─── 스크립트 실행 ──────────────────────────────────────
+# ─── Script execution ────────────────────────────────────
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Compute PCA shape coefficients for GPA-aligned meshes.'

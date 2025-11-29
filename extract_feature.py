@@ -17,19 +17,24 @@ from torchvision import models, transforms
 from PIL import Image
 import torch.nn as nn
 
-# ─── 경로 설정 ──────────────────────────────────────────
-DEFAULT_RENDERED_MASKS_DIR = r"C:\Users\AV75950\Documents\rendered_masks"
-DEFAULT_FEATURES_DIR       = r"C:\Users\AV75950\Documents\features"
+from pathlib import Path
 
-# ─── 모델 구축 ──────────────────────────────────────────
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+
+# ─── Path setup ──────────────────────────────────────────
+DEFAULT_RENDERED_MASKS_DIR = DATA_DIR / "rendered_masks"
+DEFAULT_FEATURES_DIR       = DATA_DIR / "features"
+
+# ─── Build model ─────────────────────────────────────────
 def build_feature_extractor(device):
     backbone = models.resnet50(pretrained=True)
-    backbone.fc = nn.Identity()  # 마지막 FC 레이어 제거
+    backbone.fc = nn.Identity()  # Remove final FC layer
     model = backbone.to(device)
     model.eval()
     return model
 
-# ─── 특징 추출 ──────────────────────────────────────────
+# ─── Feature extraction ──────────────────────────────────
 def extract_feature(image_path, model, transform, device):
     image = Image.open(image_path).convert('RGB')
     tensor = transform(image).unsqueeze(0).to(device)
@@ -37,7 +42,7 @@ def extract_feature(image_path, model, transform, device):
         feat = model(tensor)
     return feat.squeeze(0).cpu().numpy()
 
-# ─── 메인 함수 ──────────────────────────────────────────
+# ─── Main function ───────────────────────────────────────
 def main(rendered_masks_dir, features_dir, device_str):
     device = torch.device(device_str)
     extractor = build_feature_extractor(device)
@@ -64,7 +69,7 @@ def main(rendered_masks_dir, features_dir, device_str):
                 np.save(os.path.join(out_folder, feat_fname), feat)
         print(f"[✓] Extracted features for {shape_folder}")
 
-# ─── 스크립트 실행 ──────────────────────────────────────
+# ─── Script execution ─────────────────────────────────────
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Extract CNN features from silhouette masks.'

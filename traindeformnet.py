@@ -28,6 +28,16 @@ from trimesh import load_mesh
 from coronary_dataset import CoronaryDataset
 from deformnet import DeformNet, build_edge_index
 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+SSM_DIR  = DATA_DIR / "ssm_new"
+FEATURES_DIR   = DATA_DIR / "features"
+COEFFS_DIR     = DATA_DIR / "coefficients"
+CHECKPOINT_DIR = ROOT / "checkpoints"
+
+
 
 def collate_fn(batch):
     feats, coeffs = zip(*batch)
@@ -149,15 +159,15 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--features_dir', type=str,
-                        default=r"C:\Users\AV75950\Documents\features")
+                        default=str(FEATURES_DIR))
     parser.add_argument('--coeffs_dir', type=str,
-                        default=r"C:\Users\AV75950\Documents\coefficients")
+                        default=str(COEFFS_DIR))
     parser.add_argument('--mean_npy', type=str,
-                        default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\mean_shape.npy")
+                        default=str(SSM_DIR / "mean_shape.npy"))
     parser.add_argument('--modes_npy', type=str,
-                        default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\modes.npy")
+                        default=str(SSM_DIR / "modes.npy"))
     parser.add_argument('--mean_stl', type=str,
-                        default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\mean_shape.stl")
+                        default=str(SSM_DIR / "mean_shape.stl"))
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--lr', type=float, default=1e-3)
@@ -167,7 +177,7 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='auto',
                         help='Compute device: cuda:X, cpu, or auto')
     parser.add_argument('--checkpoint', type=str,
-                        default=r"C:\Users\AV75950\Documents\checkpoints\deformnet.pth")
+                        default=str(CHECKPOINT_DIR / "deformnet.pth"))
     args = parser.parse_args()
     os.makedirs(os.path.dirname(args.checkpoint), exist_ok=True)
     main(args)

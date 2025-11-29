@@ -3,16 +3,21 @@ import numpy as np
 import trimesh
 from trimesh.registration import icp  
 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+
 # make folder if not exist for save
-input_dir = "C:/Users/AV75950/python/env/shapenet5/good_stl"
-output_dir = "C:/Users/AV75950/python/env/shapenet5/output_new"
+input_dir = DATA_DIR / "good_stl"
+output_dir = DATA_DIR / "output_new"
 os.makedirs(output_dir, exist_ok=True)
 
 # get stl mesh file from input folder
 stl_files = [f for f in os.listdir(input_dir) if f.endswith(".stl")]
 
 # prepare reference mesh
-ref_filepath = os.path.join(input_dir, stl_files[0])
+ref_filepath = input_dir / stl_files[0]
 ref_mesh = trimesh.load_mesh(ref_filepath)
 ref_vertices = ref_mesh.vertices.copy()
 # adapt the reference centroid
@@ -56,6 +61,6 @@ for filename in stl_files:
 
     # save new mesh with new point but same face
     new_mesh = trimesh.Trimesh(vertices=verts_normalized, faces=mesh.faces)
-    save_path = os.path.join(output_dir, filename)
+    save_path = output_dir / filename
     new_mesh.export(save_path)
     print(f"{filename} → aligned & normalized saved to {save_path}")

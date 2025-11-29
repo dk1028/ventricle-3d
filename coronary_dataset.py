@@ -6,8 +6,8 @@ Defines a PyTorch Dataset for pairing CNN features of 2D masks with PCA coeffici
 Usage example:
     from coronary_dataset import CoronaryDataset
     dataset = CoronaryDataset(
-        features_dir=r"C:\Users\AV75950\Documents\features",
-        coeffs_dir=r"C:\Users\AV75950\Documents\coefficients"
+        features_dir="data/features",
+        coeffs_dir="data/coefficients"
     )
     loader = torch.utils.data.DataLoader(dataset, batch_size=16, shuffle=True)
 """
@@ -16,6 +16,11 @@ import os
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
 
 class CoronaryDataset(Dataset):
     r"""
@@ -86,8 +91,8 @@ if __name__ == '__main__':
     import torch
     from torch.utils.data import DataLoader
 
-    features_dir = r"C:\Users\AV75950\Documents\features"
-    coeffs_dir   = r"C:\Users\AV75950\Documents\coefficients"
+    features_dir = DATA_DIR / "features"
+    coeffs_dir   = DATA_DIR / "coefficients"
     dataset = CoronaryDataset(features_dir, coeffs_dir)
     print(f"Total samples: {len(dataset)}")
     loader = DataLoader(dataset, batch_size=8, shuffle=True)

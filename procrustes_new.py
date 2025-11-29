@@ -3,24 +3,29 @@ import numpy as np
 import trimesh
 from sklearn.neighbors import NearestNeighbors
 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+
 # 1. Set paths
 
 # Set to the directory containing normalized STL files
-INPUT_DIR  = r"C:\Users\AV75950\python\env\shapenet5\output_new"
+INPUT_DIR  = DATA_DIR / "output_new"
 # Set to the directory where GPA results will be saved
-OUTPUT_DIR = r"C:\Users\AV75950\python\env\shapenet5\procrustes_new1"
+OUTPUT_DIR = DATA_DIR / "procrustes_new1"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Sorted list of STL files
 stl_files = sorted([
-    os.path.join(INPUT_DIR, f)
+    INPUT_DIR / f
     for f in os.listdir(INPUT_DIR)
     if f.lower().endswith(".stl")
 ])
 N = len(stl_files)
 if N == 0:
-    raise RuntimeError("No STL files found in " + INPUT_DIR)
+    raise RuntimeError(f"No STL files found in {INPUT_DIR}")
 
 # 2. Set reference mesh and establish correspondence
 
@@ -105,5 +110,5 @@ for iteration in range(1, 11):
 for i, path in enumerate(stl_files):
     mesh     = trimesh.Trimesh(vertices=aligned[i], faces=ref_mesh.faces)
     out_name = os.path.basename(path).replace(".stl", "_gpa.stl")
-    mesh.export(os.path.join(OUTPUT_DIR, out_name))
+    mesh.export(OUTPUT_DIR / out_name)
     print(f"Saved GPA-aligned shape: {out_name}")

@@ -3,6 +3,8 @@ import torch
 import imageio
 import trimesh
 
+from pathlib import Path
+
 from pytorch3d.io import load_objs_as_meshes
 from pytorch3d.structures import Meshes
 from pytorch3d.renderer import (
@@ -97,9 +99,12 @@ def render_all_stl_to_masks_and_rgbs(stl_folder, output_root, views=4, dist=1.2)
             print(f"[✗] Failed on {stl_file}: {e}")
 
 if __name__ == "__main__":
+    ROOT = Path(__file__).resolve().parent
+    DATA_DIR = ROOT / "data"
+
     render_all_stl_to_masks_and_rgbs(
-        stl_folder=r"C:\Users\AV75950\python\env\shapenet5\output_new",
-        output_root=r"C:\Users\AV75950\Documents\rendered_masks",
+        stl_folder=DATA_DIR / "output_new",
+        output_root=DATA_DIR / "rendered_masks",
         views=4,
         dist=1.2
     )

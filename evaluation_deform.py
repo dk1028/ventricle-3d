@@ -40,6 +40,16 @@ from trimesh import load_mesh
 from coronary_dataset import CoronaryDataset
 from deformnet import DeformNet, build_edge_index
 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+SSM_DIR  = DATA_DIR / "ssm_new"
+FEATURES_DIR   = DATA_DIR / "features"
+COEFFS_DIR     = DATA_DIR / "coefficients"
+CHECKPOINT_DIR = ROOT / "checkpoints"
+EVAL_DIR       = ROOT / "evaluation"
+
 # Silhouette renderer
 
 def get_sil_renderer(image_size=256):
@@ -155,13 +165,14 @@ def main(args):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--features_dir', type=str, default=r"C:\Users\AV75950\Documents\features")
-    parser.add_argument('--coeffs_dir', type=str, default=r"C:\Users\AV75950\Documents\coefficients")
-    parser.add_argument('--mean_npy', type=str, default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\mean_shape.npy")
-    parser.add_argument('--modes_npy', type=str, default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\modes.npy")
-    parser.add_argument('--mean_stl', type=str, default=r"C:\Users\AV75950\python\env\shapenet5\ssm_new\mean_shape.stl")
-    parser.add_argument('--checkpoint', type=str, default=r"C:\Users\AV75950\Documents\checkpoints\deformnet.pth")
-    parser.add_argument('--output_dir', type=str, default=r"C:\Users\AV75950\Documents\evaluation")
+    parser.add_argument('--features_dir', type=str, default=str(FEATURES_DIR))
+    parser.add_argument('--coeffs_dir', type=str, default=str(COEFFS_DIR))
+    parser.add_argument('--mean_npy', type=str, default=str(SSM_DIR / "mean_shape.npy"))
+    parser.add_argument('--modes_npy', type=str, default=str(SSM_DIR / "modes.npy"))
+    parser.add_argument('--mean_stl', type=str, default=str(SSM_DIR / "mean_shape.stl"))
+    parser.add_argument('--checkpoint', type=str, default=str(CHECKPOINT_DIR / "deformnet.pth"))
+    parser.add_argument('--output_dir', type=str, default=str(EVAL_DIR))
     parser.add_argument('--hidden_dim', type=int, default=256)
+
     args = parser.parse_args()
     main(args)
